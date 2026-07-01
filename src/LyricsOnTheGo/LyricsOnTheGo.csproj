@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <!-- Windows 10.0.19041 TFM so the system WinRT projections (Windows.UI.Composition,
+         Windows.System.DispatcherQueueController) are available for the persistent acrylic. -->
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <RootNamespace>LyricsOnTheGo</RootNamespace>
+    <AssemblyName>LyricsOnTheGo</AssemblyName>
+    <UseWPF>true</UseWPF>
+    <!-- WinForms is only used for the system tray icon (NotifyIcon); it ships with the
+         Windows .NET runtime, so this adds no external dependency. -->
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>..\..\lyricsonthego.ico</ApplicationIcon>
+
+    <!-- Keep WPF's DPI handling (the glass positioning relies on the manifest's dpiAware
+         settings); silence WinForms' advisory to move DPI config into project properties. -->
+    <NoWarn>WFAC010</NoWarn>
+
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+    <!-- Drop the .NET/WPF localized satellite resource assemblies (cs, de, fr, ja, …). The app's
+         own EN/ES strings live in I18n.cs and are unaffected; this just removes the per-language
+         framework-string folders from the publish output. -->
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+
+    <!-- Branding / versioning. New stack + new repository → fresh 1.0.0. -->
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Product>LyricsOnTheGo</Product>
+    <Company>Luis Anchondo</Company>
+    <Authors>Luis Anchondo</Authors>
+    <Copyright>Copyright © Luis Anchondo. MIT License.</Copyright>
+    <Description>Real-time synced lyrics overlay for Windows.</Description>
+  </PropertyGroup>
+
+</Project>

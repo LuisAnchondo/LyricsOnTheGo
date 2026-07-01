@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- WiX Toolset v5 source for the LyricsOnTheGo MSI. Per-machine x64 install with the standard
+     WixUI_InstallDir wizard (branded, license page skipped — open source), Start Menu + Desktop
+     shortcuts, and a "Launch LyricsOnTheGo" option on the finish page.
+     IMPORTANT: build with the working directory set to THIS folder (installer\), so the relative
+     source paths below resolve correctly. build-msi.ps1 does that. -->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+
+  <Package Name="LyricsOnTheGo"
+           Manufacturer="Luis Anchondo"
+           Version="1.0.0"
+           UpgradeCode="3D9B1E54-2C7A-4F8B-9A6E-1B2C3D4E5F60"
+           Scope="perMachine">
+
+    <SummaryInformation Description="Real-time synced lyrics overlay" />
+
+    <!-- AllowSameVersionUpgrades: reinstalling 2.0.0 over an existing 2.0.0 fully removes the old
+         install first, so files dropped by an earlier build (e.g. satellite language folders) are
+         cleaned up instead of left orphaned. -->
+    <MajorUpgrade AllowSameVersionUpgrades="yes"
+                  DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Icon Id="AppIcon" SourceFile="..\lyricsonthego.ico" />
+    <Property Id="ARPPRODUCTICON" Value="AppIcon" />
+    <Property Id="ARPURLINFOABOUT" Value="https://github.com/LuisAnchondo" />
+
+    <!-- Branding for the WixUI wizard (paths relative to installer\). -->
+    <WixVariable Id="WixUIBannerBmp" Value="wix-banner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="wix-dialog.bmp" />
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="LyricsOnTheGo" />
+    </StandardDirectory>
+    <StandardDirectory Id="ProgramMenuFolder" />
+    <StandardDirectory Id="DesktopFolder" />
+
+    <Feature Id="Main" Title="LyricsOnTheGo" Level="1">
+      <!-- The entire self-contained publish output (includes LyricsOnTheGo.exe). -->
+      <Files Include="..\publish\**" Directory="INSTALLFOLDER" />
+      <ComponentRef Id="cmpStartMenu" />
+      <ComponentRef Id="cmpDesktop" />
+    </Feature>
+
+    <Component Id="cmpStartMenu" Directory="ProgramMenuFolder"
+               Guid="7A1F0C32-5E48-4B9D-8C2A-9F3E1D0B6A77">
+      <Shortcut Id="scStartMenu" Name="LyricsOnTheGo" Target="[INSTALLFOLDER]LyricsOnTheGo.exe"
+                WorkingDirectory="INSTALLFOLDER" Icon="AppIcon" />
+      <RemoveFolder Id="rmStartMenu" On="uninstall" />
+      <RegistryValue Root="HKCU" Key="Software\LyricsOnTheGo" Name="installed"
+                     Type="integer" Value="1" KeyPath="yes" />
+    </Component>
+
+    <Component Id="cmpDesktop" Directory="DesktopFolder"
+               Guid="B2D4F6A8-1C3E-4A5B-8D7F-0E9C1A2B3C4D">
+      <Shortcut Id="scDesktop" Name="LyricsOnTheGo" Target="[INSTALLFOLDER]LyricsOnTheGo.exe"
+                WorkingDirectory="INSTALLFOLDER" Icon="AppIcon" />
+      <RegistryValue Root="HKCU" Key="Software\LyricsOnTheGo" Name="desktop"
+                     Type="integer" Value="1" KeyPath="yes" />
+    </Component>
+
+    <!-- Standard install-dir wizard, but skip the license page (MIT / open source). -->
+    <ui:WixUI Id="WixUI_InstallDir" InstallDirectory="INSTALLFOLDER" />
+    <UI>
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg"
+               Order="2" Condition="NOT Installed" />
+      <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg"
+               Order="2" Condition="NOT Installed" />
+      <!-- Run the app when the user leaves the "Launch" box checked. -->
+      <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="LaunchApp"
+               Condition="WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed" />
+    </UI>
+
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch LyricsOnTheGo" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
+    <CustomAction Id="LaunchApp" Directory="INSTALLFOLDER"
+                  ExeCommand='"[INSTALLFOLDER]LyricsOnTheGo.exe"'
+                  Return="asyncNoWait" Impersonate="yes" />
+  </Package>
+</Wix>
