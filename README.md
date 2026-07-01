@@ -8,7 +8,7 @@
 
 Native Windows app built with WPF (.NET 8) · No account or login required
 
-<sub>A native Windows rewrite of the original <a href="https://github.com/LuisAnchondo/LyricsOnTheGo">LyricsOnTheGo</a>.</sub>
+<sub>A native Windows rewrite of the original <a href="https://github.com/LuisAnchondo/LyricsOnTheGo-Rust">LyricsOnTheGo</a>.</sub>
 
 </div>
 
@@ -86,13 +86,13 @@ through a bounded retry state machine and cached to disk keyed by a hash of the 
 
 ## Tech stack
 
-| Layer   | Tech                                                                        |
-| ------- | --------------------------------------------------------------------------- |
-| UI      | WPF (.NET 8, `net8.0-windows10.0.19041`), XAML                              |
-| Glass   | `Windows.UI.Composition` acrylic via WinRT interop (own dispatcher thread)  |
-| Now-playing | Windows SMTC (`GlobalSystemMediaTransportControlsSessionManager`)       |
-| Lyrics  | [LRCLIB](https://lrclib.net) public API · `HttpClient` · `System.Text.Json` |
-| Tray    | `System.Windows.Forms.NotifyIcon`                                           |
+| Layer       | Tech                                                                        |
+| ----------- | --------------------------------------------------------------------------- |
+| UI          | WPF (.NET 8, `net8.0-windows10.0.19041`), XAML                              |
+| Glass       | `Windows.UI.Composition` acrylic via WinRT interop (own dispatcher thread)  |
+| Now-playing | Windows SMTC (`GlobalSystemMediaTransportControlsSessionManager`)           |
+| Lyrics      | [LRCLIB](https://lrclib.net) public API · `HttpClient` · `System.Text.Json` |
+| Tray        | `System.Windows.Forms.NotifyIcon`                                           |
 
 ## Requirements
 
@@ -132,7 +132,7 @@ powershell -File installer\build-msi.ps1   # -> dist\LyricsOnTheGo-1.0.0.msi
 - **Karaoke (mic):** borderless-fullscreen, large centered lyrics.
 - **Pin:** toggle always-on-top.
 - **Close (×):** hides the overlay to the system tray (it keeps running).
-- **Tray icon:** left-click to show/hide; right-click for *Show/Hide*, *Click-through*, *Quit*.
+- **Tray icon:** left-click to show/hide; right-click for _Show/Hide_, _Click-through_, _Quit_.
 - **Scroll the lyrics:** mouse wheel, click-drag, or the scrollbar; **Ctrl + wheel** resizes text.
   A **Resync** button appears when you scroll away — click it to return to the active line.
 
